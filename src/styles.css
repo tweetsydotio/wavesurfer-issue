@@ -2,3 +2,9 @@
   font-family: sans-serif;
   text-align: center;
 }
+
+#waveform_container ::part(region) {
+  border-radius: 10px;
+  /* height: 70px; */
+  /* background-color: red !important; */
+}

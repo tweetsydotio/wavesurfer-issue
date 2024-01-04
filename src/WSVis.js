@@ -134,7 +134,13 @@ function WSVis() {
   useEffect(() => {
     regionsRef.current = regions;
   }, [regions]);
-
+  useEffect(() => {
+    return () => {
+      if (wavesurferRef.current) {
+        wavesurferRef.current.destroy();
+      }
+    };
+  }, [location]);
   const regionCreatedHandler = useCallback(
     (region) => {
       console.log("region-created --> region:", region);
@@ -160,10 +166,10 @@ function WSVis() {
 
         wavesurferRef.current.on("region-created", regionCreatedHandler);
 
-        wavesurferRef.current.on("ready", () => {
-          console.log("WaveSurfer is ready");
-          setIsLoaded(true);
-        });
+        // wavesurferRef.current.on("ready", () => {
+        //   console.log("WaveSurfer is ready");
+        //   setIsLoaded(true);
+        // });
 
         wavesurferRef.current.on("region-removed", (region) => {
           console.log("region-removed --> ", region);
@@ -296,14 +302,22 @@ function WSVis() {
         container="#waveform"
       >
         <WaveForm>
-          {isLoaded &&
+          {regions.map((regionProps) => (
+            <Region
+              onUpdateEnd={handleRegionUpdate}
+              key={regionProps.id}
+              {...regionProps}
+            />
+          ))}
+
+          {/* {isLoaded &&
             regions.map((regionProps) => (
               <Region
                 onUpdateEnd={handleRegionUpdate}
                 key={regionProps.id}
                 {...regionProps}
               />
-            ))}
+            ))} */}
           {isLoaded &&
             markers.map((markerProps) => (
               <Marker
